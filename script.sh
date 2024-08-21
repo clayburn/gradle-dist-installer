@@ -48,8 +48,19 @@ function print_wrapper_jar_version() {
   echo "Current Wrapper Jar:      $version"
 }
 
-section "Deleting Gradle User Home ($GRADLE_USER_HOME)"
-rm -rf "$GRADLE_USER_HOME"
+section "Cleaning Gradle User Home ($GRADLE_USER_HOME)"
+echo "Are you sure you want to delete Gradle User Home ($GRADLE_USER_HOME)? [y/N]"
+read -r response
+case "$response" in
+    [yY][eE][sS]|[yY])
+        rm -rf "$GRADLE_USER_HOME"
+        ;;
+    *)
+        # If the user does not confirm, do not delete and print a message
+        echo "Operation cancelled by user"
+        exit 1
+        ;;
+esac
 
 section "Beginning State"
 echo "Reverting gradle directory"
