@@ -7,6 +7,8 @@ export GRADLE_USER_HOME=$(pwd)/guh
 GRADLE_DISTRIBUTION_URL=https\://services.gradle.org/distributions
 DISTRIBUTION_TYPE=bin
 
+WRAPPER_DISTS=$GRADLE_USER_HOME/wrapper/dists
+
 function section() {
     echo ""
     echo "################################################################################"
@@ -20,7 +22,12 @@ function print_wrapper_info() {
 }
 
 function current_wrappers() {
-  tree guh/wrapper/dists -d -L 2
+  if [ -d "$WRAPPER_DISTS" ]; then
+    echo "Current Wrappers:"
+    find "$WRAPPER_DISTS" -type d -depth 2  -print | sed "s|^$WRAPPER_DISTS/|- |" | sort
+  else
+    echo "No wrappers found"
+  fi
 }
 
 function print_wrapper_jar_version() {
